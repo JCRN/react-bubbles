@@ -7,7 +7,7 @@ const initialColor = {
   code: { hex: '' }
 }
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = ({ colors, history, updateColors }) => {
   console.log('Init ColorList: ', colors)
   const [editing, setEditing] = useState(false)
   const [colorToEdit, setColorToEdit] = useState(initialColor)
