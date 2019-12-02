@@ -1,31 +1,40 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react'
+
+import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 const initialColor = {
-  color: "",
-  code: { hex: "" }
-};
+  color: '',
+  code: { hex: '' }
+}
 
-const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
-  const [editing, setEditing] = useState(false);
-  const [colorToEdit, setColorToEdit] = useState(initialColor);
+const ColorList = ({ colors, history, updateColors }) => {
+  console.log('Init ColorList: ', colors)
+  const [editing, setEditing] = useState(false)
+  const [colorToEdit, setColorToEdit] = useState(initialColor)
 
   const editColor = color => {
-    setEditing(true);
-    setColorToEdit(color);
-  };
+    setEditing(true)
+    setColorToEdit(color)
+  }
 
   const saveEdit = e => {
-    e.preventDefault();
-    // Make a put request to save your updated color
-    // think about where will you get the id from...
-    // where is is saved right now?
-  };
+    e.preventDefault()
+    axiosWithAuth()
+      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then(response => {
+        console.log('ColorList .put response.data:', response.data)
+      })
+      .catch(error => console.log('ColorList .put error', error))
+  }
 
   const deleteColor = color => {
-    // make a delete request to delete this color
-  };
+    axiosWithAuth()
+      .delete(`http://localhost:5000/api/colors/${color.id}`, color)
+      .then(response => {
+        console.log('ColorList .delete response.data:', response.data)
+      })
+      .catch(error => console.log('ColorList .put error', error))
+  }
 
   return (
     <div className="colors-wrap">
@@ -36,7 +45,7 @@ const ColorList = ({ colors, updateColors }) => {
             <span>
               <span className="delete" onClick={() => deleteColor(color)}>
                 x
-              </span>{" "}
+              </span>{' '}
               {color.color}
             </span>
             <div
@@ -79,7 +88,7 @@ const ColorList = ({ colors, updateColors }) => {
       <div className="spacer" />
       {/* stretch - build another form here to add a color */}
     </div>
-  );
-};
+  )
+}
 
-export default ColorList;
+export default ColorList
